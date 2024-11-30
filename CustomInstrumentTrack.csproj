@@ -27,6 +27,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <Reference Include="Assembly-CSharp">
             <HintPath>$(ManagedPath)/Assembly-CSharp.dll</HintPath>
         </Reference>
@@ -58,6 +59,9 @@
         <Reference Include="UnityEngine.UI">
             <HintPath>$(ManagedPath)/UnityEngine.UI.dll</HintPath>
         </Reference>
+        <!-- <Reference Include="CustomWhateverLoader">
+            <HintPath>D:/Steam/steamapps/workshop/content/2135150/3370512305/CustomWhateverLoader.dll</HintPath>
+        </Reference> -->
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
@@ -77,16 +81,8 @@
         <MakeDir Directories="$(ModFolder)" />
         
         <!-- Copy the compiled DLL to the mod folder -->
-        <Copy 
-            SourceFiles="$(TargetPath)"
-            DestinationFolder="$(ModFolder)"
-            SkipUnchangedFiles="true"
-        />
-        <Copy 
-            SourceFiles="@(PackageFiles)"
-            DestinationFolder="$(ModFolder)\%(RecursiveDir)"
-            SkipUnchangedFiles="true"
-        />
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModFolder)" SkipUnchangedFiles="true" />
+        <Copy SourceFiles="@(PackageFiles)" DestinationFolder="$(ModFolder)\%(RecursiveDir)" SkipUnchangedFiles="true" />
         <!-- Optional: You can add a message to confirm the copy -->
         <Message Text="Copied $(TargetFileName) to $(ModFolder)" Importance="high" />
     </Target>
