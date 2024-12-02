@@ -70,7 +70,7 @@ class AudioManager
                 bgmData.fadeLength = 0;
                 bgmData.type = SoundData.Type.BGM;
                 bgmData.spatial = 1.0f;
-                bgmData.pitch = 0.89f;
+                bgmData.pitch = 1.0f;
                 bgmData.randomPitch = 0;
                 bgmData.chance = 1;
                 bgmData.reverbMix = 1;
@@ -104,6 +104,9 @@ class AudioManager
 
         if (bgmData != null)
         {
+            // Force setting pitch to 1.0f
+            bgmData.pitch = 1.0f;
+            // Force update parts
             UpdateBGMParts(bgmData);
             UpdateBGMData(bgmData);
         }

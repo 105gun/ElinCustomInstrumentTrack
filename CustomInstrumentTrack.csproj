@@ -59,9 +59,15 @@
         <Reference Include="UnityEngine.UI">
             <HintPath>$(ManagedPath)/UnityEngine.UI.dll</HintPath>
         </Reference>
-        <!-- <Reference Include="CustomWhateverLoader">
+        <Reference Include="Plugins.Tween">
+            <HintPath>$(ManagedPath)/Plugins.Tween.dll</HintPath>
+        </Reference>
+        <Reference Include="DOTween">
+            <HintPath>$(ManagedPath)/DOTween.dll</HintPath>
+        </Reference>
+        <Reference Include="CustomWhateverLoader">
             <HintPath>D:/Steam/steamapps/workshop/content/2135150/3370512305/CustomWhateverLoader.dll</HintPath>
-        </Reference> -->
+        </Reference>
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">

@@ -16,7 +16,11 @@ namespace CustomTrackMod;
 [HarmonyPatch]
 public static class CustomTrackPatch
 {
-    /*
+    static void DumpBGM(string name)
+    {
+        DumpBGM(EClass.Sound.GetData($"Instrument/{name}") as BGMData);
+    }
+    
     static void DumpBGM(BGMData data)
     {
         Plugin.ModLog($"{data.name}: Length {data.clip.length} parts.count {data.song.parts.Count}", PrivateLogLevel.Error);
@@ -36,7 +40,7 @@ public static class CustomTrackPatch
             Plugin.ModLog($"Part: {part.start} {part.duration}", PrivateLogLevel.Error);
         }
     }
-*/
+
     public static bool forceMaxLevel = false;
     public static Dictionary<string, string> instrumentMap = new Dictionary<string, string>();
 
