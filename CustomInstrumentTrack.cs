@@ -62,7 +62,7 @@ public static class CustomTrackPatch
                 {
                     Plugin.ModLog($"ForceMaxLevel: {instrumentMap[idInstrument]}", PrivateLogLevel.Info);
 			        EClass.player.knownSongs[instrumentMap[idInstrument]] = new KnownSong();
-                    EClass.player.knownSongs[instrumentMap[idInstrument]].lv = 65536;
+                    EClass.player.knownSongs[instrumentMap[idInstrument]].lv = 0x0F000000;
                 }
                 return instrumentMap[idInstrument];
             }

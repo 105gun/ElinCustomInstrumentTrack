@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Cwl.API;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -10,40 +11,7 @@ class JsonManager
     public static void SaveBGMJsonData(BGMData bgmData)
     {
         string path = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Sound", $"{bgmData.name}.json");
-        var data = new SerializableSoundData
-        {
-            type = SoundData.Type.BGM,
-            loop = bgmData.loop,
-            minInterval = bgmData.minInterval,
-            chance = bgmData.chance,
-            delay = bgmData.delay,
-            startAt = bgmData.startAt,
-            fadeAtStart = bgmData.fadeAtStart,
-            fadeLength = bgmData.fadeLength,
-            volume = bgmData.volume,
-            volumeAsMtp = bgmData.volumeAsMTP,
-            allowMultiple = bgmData.allowMultiple,
-            skipIfPlaying = bgmData.skipIfPlaying,
-            important = bgmData.important,
-            alwaysPlay = bgmData.alwaysPlay,
-            noSameSound = bgmData.noSameSound,
-            pitch = bgmData.pitch,
-            randomPitch = bgmData.randomPitch,
-            reverbMix = bgmData.reverbMix,
-            spatial = bgmData.spatial,
-            bgmDataOptional = new SerializableSoundData.SerializableBGMData
-            {
-                day = bgmData.day,
-                night = bgmData.night,
-                fadeIn = bgmData.song.fadeIn,
-                fadeOut = bgmData.song.fadeOut,
-                failDuration = bgmData.song.failDuration,
-                failPitch = bgmData.song.failPitch,
-                pitchDuration = bgmData.song.pitchDuration,
-                parts = bgmData.song.parts
-            }
-        };
-        WriteConfig(data, path);
+        bgmData.WriteMetaTo(path);
     }
 
     public static void SavePrivateData()
