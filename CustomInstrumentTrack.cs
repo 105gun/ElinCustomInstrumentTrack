@@ -41,12 +41,13 @@ public static class CustomTrackPatch
         }
     }
 
-    public static bool forceMaxLevel = false;
     public static Dictionary<string, string> instrumentMap = new Dictionary<string, string>();
+    public static HashSet<string> maxLevelSet = new HashSet<string>();
 
     public static void Init()
     {
         JsonManager.LoadPrivateData();
+        JsonManager.LoadOtherData();
     }
 
     public static string ReplaceIdSong(string idInstrument)
@@ -58,7 +59,7 @@ public static class CustomTrackPatch
             if (AudioManager.isLegal(instrumentMap[idInstrument]))
             {
                 Plugin.ModLog($"\tInst: {idInstrument} => {instrumentMap[idInstrument]}", PrivateLogLevel.Info);
-                if (forceMaxLevel)
+                if (maxLevelSet.Contains(instrumentMap[idInstrument]))
                 {
                     Plugin.ModLog($"ForceMaxLevel: {instrumentMap[idInstrument]}", PrivateLogLevel.Info);
 			        EClass.player.knownSongs[instrumentMap[idInstrument]] = new KnownSong();

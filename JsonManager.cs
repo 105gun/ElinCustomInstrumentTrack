@@ -2,36 +2,46 @@ using System;
 using System.IO;
 using Cwl.API;
 using Newtonsoft.Json;
+using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace CustomTrackMod;
 
 class JsonManager
 {
+    static string currentPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
     public static void SaveBGMJsonData(BGMData bgmData)
     {
-        string path = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "Sound", $"{bgmData.name}.json");
+        string path = Path.Combine(currentPath, "Sound", $"{bgmData.name}.json");
         bgmData.WriteMetaTo(path);
     }
 
-    public static void SavePrivateData()
+    public static void UpdateFromJson(string path, SerializablePrivateData data)
     {
-        var data = new SerializablePrivateData
+        Plugin.ModLog($"Loading from {path}, {data.instrumentMap.Count} new items", PrivateLogLevel.Info);
+        foreach (var kvp in data.instrumentMap)
         {
-            forceMaxLevel = CustomTrackPatch.forceMaxLevel,
-            instrumentMap = CustomTrackPatch.instrumentMap
-        };
-        string path = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "CIT.json");
-        WriteConfig(data, path);
+            if (CustomTrackPatch.instrumentMap.ContainsKey(kvp.Key))
+            {
+                Plugin.ModLog($"\tKey {kvp.Key} already exists. Overwriting: {CustomTrackPatch.instrumentMap[kvp.Key]} => {kvp.Value}", PrivateLogLevel.Warning);
+            }
+
+            CustomTrackPatch.instrumentMap[kvp.Key] = kvp.Value;
+            if (data.forceMaxLevel)
+            {
+                CustomTrackPatch.maxLevelSet.Add(kvp.Value);
+            }
+        }
     }
 
     public static void LoadPrivateData()
     {
-        string path = Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "CIT.json");
+        string path = Path.Combine(currentPath, "CIT.json");
         if (ReadConfig(path, out SerializablePrivateData? data) && data != null)
         {
-            CustomTrackPatch.forceMaxLevel = data.forceMaxLevel;
-            CustomTrackPatch.instrumentMap = data.instrumentMap;
+            UpdateFromJson(path, data);
         }
         else
         {
@@ -39,6 +49,35 @@ class JsonManager
             CustomTrackPatch.instrumentMap = new();
             CustomTrackPatch.instrumentMap["lute"] = "HouraiDensetsu";
             SavePrivateData();
+        }
+    }
+
+    public static void SavePrivateData()
+    {
+        var data = new SerializablePrivateData
+        {
+            forceMaxLevel = false,
+            instrumentMap = CustomTrackPatch.instrumentMap
+        };
+        string path = Path.Combine(currentPath, "CIT.json");
+        WriteConfig(data, path);
+    }
+
+    public static void LoadOtherData()
+    {
+        foreach (var directoryInfo in Cwl.Helper.FileUtil.PackageIterator.GetLoadedPackages())
+        {
+            string path = Path.Combine(directoryInfo.FullName, "CIT.json");
+
+            if (directoryInfo.FullName == currentPath)
+            {
+                continue;
+            }
+
+            if (ReadConfig(path, out SerializablePrivateData? data) && data != null)
+            {
+                UpdateFromJson(path, data);
+            }
         }
     }
 

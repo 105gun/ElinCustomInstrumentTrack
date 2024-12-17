@@ -21,7 +21,7 @@ public enum PrivateLogLevel
     Debug
 };
 
-[BepInPlugin("105gun.customtrack.mod", "Custom Instrument Track", "1.0.0.0")]
+[BepInPlugin("105gun.customtrack.mod", "Custom Instrument Track", "1.1.0.0")]
 public class Plugin : BaseUnityPlugin
 {
     static PrivateLogLevel pluginLogLevel = PrivateLogLevel.Info;
